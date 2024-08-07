@@ -30,8 +30,8 @@ options:
 # [START cloudbuild_python_logs_yaml]
 # Save test logs to Google Cloud Storage
 artifacts:
-       pythonPackages:
-       - repository: 'https://europe-python.pkg.dev/$PROJECT_ID/$COMMIT_SHA'
-       paths: ['dist/*']
+  pythonPackages:
+  - repository: 'https://europe-python.pkg.dev/$PROJECT_ID/$COMMIT_SHA'
+    paths: ['dist/*']
 # [END cloudbuild_python_logs_yaml]
 # Store images in Google Artifact Registry 
