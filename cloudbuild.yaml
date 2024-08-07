@@ -15,39 +15,14 @@
 # [START cloudbuild_python_dependencies_yaml]
 steps:
   # Install dependencies
-  - name: python
-    entrypoint: pip
+  - name: 'python'
+    entrypoint: 'pip'
     args: ["install", "-r", "requirements.txt", "--user"]
-# [END cloudbuild_python_dependencies_yaml]
 
-  # [START cloudbuild_python_tests_yaml]
-  # Run unit tests
-  - name: python
-    entrypoint: python
-    args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"] 
-  # [END cloudbuild_python_tests_yaml]
-
-  # [START cloudbuild_python_image_yaml]
-  # Docker Build
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 
-           'europe-west9-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}', '.']
-  # [END cloudbuild_python_image_yaml]
-
-  # [START cloudbuild_python_push_yaml]
-  # Docker push to Google Artifact Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push',  'europe-west9-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}']
-  # [END cloudbuild_python_push_yaml]
+  - name: 'python'
+    entrypoint: 'python'
+    args: ['-m', 'build']
   
-  # [START cloudbuild_python_deploy_yaml]
-  # Deploy to Cloud Run
-  - name: google/cloud-sdk
-    args: ['gcloud', 'run', 'deploy', 'helloworld-${SHORT_SHA}', 
-           '--image=europe-west9-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}', 
-           '--region', 'europe-west9', '--platform', 'managed', 
-           '--allow-unauthenticated']
-  # [END cloudbuild_python_deploy_yaml]
 
 options:
   logging: CLOUD_LOGGING_ONLY
@@ -55,12 +30,8 @@ options:
 # [START cloudbuild_python_logs_yaml]
 # Save test logs to Google Cloud Storage
 artifacts:
-  objects:
-    location: gs://${_BUCKET_NAME}/
-    paths:
-      - ${SHORT_SHA}_test_log.xml
+       pythonPackages:
+       - repository: 'https://europe-python.pkg.dev/$PROJECT_ID/$COMMIT_SHA'
+       paths: ['dist/*']
 # [END cloudbuild_python_logs_yaml]
 # Store images in Google Artifact Registry 
-images:
-  - europe-west9-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}
-# [END cloudbuild_python_yaml]
