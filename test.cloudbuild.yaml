@@ -16,5 +16,5 @@ steps:
       - '-c'
       - |
         gsutil rm gs://${_BUCKET_NAME}/${SHORT_SHA}_test_log.xml
-        gcloud artifacts docker images delete us-central1-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}
-        gcloud run services delete helloworld-${SHORT_SHA} --region us-central1 --quiet
+        gcloud artifacts docker images delete europe-west9-docker.pkg.dev/${PROJECT_ID}/${_ARTIFACT_REGISTRY_REPO}/myimage:${SHORT_SHA}
+        gcloud run services delete helloworld-${SHORT_SHA} --region europe-west9 --quiet
